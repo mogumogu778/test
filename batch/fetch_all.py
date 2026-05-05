@@ -1,6 +1,5 @@
 import yfinance as yf
 import pandas as pd
-import pandas_ta as ta
 import json
 import os
 import time
@@ -29,14 +28,22 @@ def safe_int(val) -> int | None:
         return None
 
 
+def calc_rsi(close: pd.Series, period: int = 14) -> pd.Series:
+    delta = close.diff()
+    gain = delta.clip(lower=0).rolling(period).mean()
+    loss = (-delta.clip(upper=0)).rolling(period).mean()
+    rs = gain / loss.replace(0, float('nan'))
+    return 100 - (100 / (1 + rs))
+
+
 def compute_indicators(hist: pd.DataFrame) -> pd.DataFrame:
     close = hist['Close'].squeeze()
     hist = hist.copy()
-    hist['RSI_14'] = ta.rsi(close, length=14)
-    hist['MA_5']   = ta.sma(close, length=5)
-    hist['MA_25']  = ta.sma(close, length=25)
-    hist['MA_75']  = ta.sma(close, length=75)
-    hist['MA_200'] = ta.sma(close, length=200)
+    hist['RSI_14'] = calc_rsi(close, 14)
+    hist['MA_5']   = close.rolling(5).mean()
+    hist['MA_25']  = close.rolling(25).mean()
+    hist['MA_75']  = close.rolling(75).mean()
+    hist['MA_200'] = close.rolling(200).mean()
     return hist
 
 
