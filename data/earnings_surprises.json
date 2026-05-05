@@ -1,1 +1,1 @@
-{"updated_at": "", "surprises": []}
+{"updated_at": "2026-05-05T04:37:54.511391+00:00", "surprises": [{"symbol": "6758", "name": "ソニーグループ", "market": "JP", "report_date": "2025-12-31", "actual_eps": null, "estimated_eps": null, "eps_surprise_pct": null, "revenue_yoy_pct": 0.55, "op_profit_yoy_pct": 19.43, "earnings_pattern": "増収増益", "price_gap_pct": null, "is_positive_surprise": true, "is_negative_surprise": false, "surprise_method": "yoy"}]}
