@@ -1,5 +1,5 @@
 US_STOCKS = [
-    # Technology
+    # --- Technology ---
     ("AAPL",  "Apple Inc.",                  "Technology"),
     ("MSFT",  "Microsoft Corp.",             "Technology"),
     ("GOOGL", "Alphabet Inc.",               "Technology"),
@@ -10,7 +10,12 @@ US_STOCKS = [
     ("IBM",   "IBM Corp.",                   "Technology"),
     ("ADBE",  "Adobe Inc.",                  "Technology"),
     ("INTU",  "Intuit Inc.",                 "Technology"),
-    # Semiconductors
+    ("CDNS",  "Cadence Design Systems",      "Technology"),
+    ("SNPS",  "Synopsys Inc.",               "Technology"),
+    ("FICO",  "Fair Isaac Corp.",            "Technology"),
+    ("APH",   "Amphenol Corp.",              "Technology"),
+    ("MSI",   "Motorola Solutions",          "Technology"),
+    # --- Semiconductors ---
     ("NVDA",  "NVIDIA Corp.",                "Semiconductors"),
     ("AVGO",  "Broadcom Inc.",               "Semiconductors"),
     ("AMD",   "Advanced Micro Devices",      "Semiconductors"),
@@ -19,18 +24,29 @@ US_STOCKS = [
     ("AMAT",  "Applied Materials",           "Semiconductors"),
     ("MU",    "Micron Technology",           "Semiconductors"),
     ("LRCX",  "Lam Research",               "Semiconductors"),
-    # Consumer Discretionary
+    ("KLAC",  "KLA Corp.",                   "Semiconductors"),
+    ("MRVL",  "Marvell Technology",          "Semiconductors"),
+    # --- Consumer Discretionary ---
     ("AMZN",  "Amazon.com Inc.",             "Consumer Disc."),
     ("TSLA",  "Tesla Inc.",                  "Consumer Disc."),
     ("HD",    "Home Depot",                  "Consumer Disc."),
     ("MCD",   "McDonald's Corp.",            "Consumer Disc."),
     ("BKNG",  "Booking Holdings",            "Consumer Disc."),
-    # Consumer Staples
+    ("NKE",   "Nike Inc.",                   "Consumer Disc."),
+    ("SBUX",  "Starbucks Corp.",             "Consumer Disc."),
+    ("LOW",   "Lowe's Companies",            "Consumer Disc."),
+    ("TJX",   "TJX Companies",              "Consumer Disc."),
+    ("CMG",   "Chipotle Mexican Grill",      "Consumer Disc."),
+    # --- Consumer Staples ---
     ("COST",  "Costco Wholesale",            "Consumer Staples"),
     ("WMT",   "Walmart Inc.",               "Consumer Staples"),
     ("PG",    "Procter & Gamble",            "Consumer Staples"),
     ("KO",    "Coca-Cola Co.",               "Consumer Staples"),
-    # Healthcare
+    ("PEP",   "PepsiCo Inc.",                "Consumer Staples"),
+    ("PM",    "Philip Morris Int'l",         "Consumer Staples"),
+    ("MDLZ",  "Mondelez Int'l",              "Consumer Staples"),
+    ("CL",    "Colgate-Palmolive",           "Consumer Staples"),
+    # --- Healthcare ---
     ("LLY",   "Eli Lilly and Co.",           "Healthcare"),
     ("UNH",   "UnitedHealth Group",          "Healthcare"),
     ("JNJ",   "Johnson & Johnson",           "Healthcare"),
@@ -38,7 +54,15 @@ US_STOCKS = [
     ("ISRG",  "Intuitive Surgical",          "Healthcare"),
     ("AMGN",  "Amgen Inc.",                  "Healthcare"),
     ("TMO",   "Thermo Fisher Scientific",    "Healthcare"),
-    # Financials
+    ("VRTX",  "Vertex Pharmaceuticals",      "Healthcare"),
+    ("REGN",  "Regeneron Pharmaceuticals",   "Healthcare"),
+    ("MDT",   "Medtronic plc",               "Healthcare"),
+    ("BSX",   "Boston Scientific",           "Healthcare"),
+    ("SYK",   "Stryker Corp.",               "Healthcare"),
+    ("ELV",   "Elevance Health",             "Healthcare"),
+    ("ZTS",   "Zoetis Inc.",                 "Healthcare"),
+    ("BMY",   "Bristol-Myers Squibb",        "Healthcare"),
+    # --- Financials ---
     ("JPM",   "JPMorgan Chase",              "Financials"),
     ("V",     "Visa Inc.",                   "Financials"),
     ("MA",    "Mastercard Inc.",             "Financials"),
@@ -46,36 +70,76 @@ US_STOCKS = [
     ("GS",    "Goldman Sachs",               "Financials"),
     ("SPGI",  "S&P Global Inc.",             "Financials"),
     ("AXP",   "American Express",            "Financials"),
-    # Streaming / SaaS
+    ("WFC",   "Wells Fargo",                 "Financials"),
+    ("BLK",   "BlackRock Inc.",              "Financials"),
+    ("MS",    "Morgan Stanley",              "Financials"),
+    ("C",     "Citigroup Inc.",              "Financials"),
+    ("COF",   "Capital One Financial",       "Financials"),
+    ("ICE",   "Intercontinental Exchange",   "Financials"),
+    ("MMC",   "Marsh & McLennan",            "Financials"),
+    ("CB",    "Chubb Ltd.",                  "Insurance"),
+    ("PGR",   "Progressive Corp.",           "Insurance"),
+    # --- Streaming / SaaS / AI ---
     ("NFLX",  "Netflix Inc.",                "Streaming"),
     ("CRM",   "Salesforce Inc.",             "SaaS"),
     ("NOW",   "ServiceNow Inc.",             "SaaS"),
-    # AI / Security
     ("PLTR",  "Palantir Technologies",       "AI/Data"),
     ("PANW",  "Palo Alto Networks",          "Security"),
     ("CRWD",  "CrowdStrike Holdings",        "Security"),
-    # Others
-    ("XOM",   "ExxonMobil Corp.",            "Energy"),
+    # --- Industrials ---
     ("GE",    "GE Aerospace",                "Industrials"),
+    ("CAT",   "Caterpillar Inc.",            "Industrials"),
+    ("HON",   "Honeywell Int'l",             "Industrials"),
+    ("RTX",   "RTX Corp.",                   "Industrials"),
+    ("LMT",   "Lockheed Martin",             "Industrials"),
+    ("DE",    "Deere & Company",             "Industrials"),
+    ("UPS",   "United Parcel Service",       "Industrials"),
+    ("BA",    "Boeing Co.",                  "Industrials"),
+    # --- Energy ---
+    ("XOM",   "ExxonMobil Corp.",            "Energy"),
+    ("CVX",   "Chevron Corp.",               "Energy"),
+    ("COP",   "ConocoPhillips",              "Energy"),
+    # --- Utilities ---
+    ("NEE",   "NextEra Energy",              "Utilities"),
+    ("DUK",   "Duke Energy",                 "Utilities"),
+    # --- Telecom ---
+    ("VZ",    "Verizon Communications",      "Telecom"),
+    ("T",     "AT&T Inc.",                   "Telecom"),
+    # --- Materials ---
+    ("LIN",   "Linde plc",                   "Materials"),
+    ("SHW",   "Sherwin-Williams",            "Materials"),
+    # --- Real Estate ---
+    ("AMT",   "American Tower Corp.",        "Real Estate"),
+    ("PLD",   "Prologis Inc.",               "Real Estate"),
+    # --- Platform ---
     ("UBER",  "Uber Technologies",           "Platform"),
 ]
 
 JP_STOCKS = [
-    # 自動車
+    # --- 自動車 ---
     ("7203.T", "トヨタ自動車",                "自動車"),
     ("7267.T", "本田技研工業",               "自動車"),
     ("6902.T", "デンソー",                   "自動車部品"),
-    # 銀行・金融
+    ("7270.T", "SUBARU",                     "自動車"),
+    ("7269.T", "スズキ",                     "自動車"),
+    ("7201.T", "日産自動車",                 "自動車"),
+    # --- 銀行・金融 ---
     ("8306.T", "三菱UFJフィナンシャルグループ", "銀行"),
     ("8316.T", "三井住友フィナンシャルグループ", "銀行"),
     ("8411.T", "みずほフィナンシャルグループ",  "銀行"),
-    # 総合テック・電機
+    ("7182.T", "ゆうちょ銀行",               "銀行"),
+    ("8591.T", "オリックス",                 "金融"),
+    ("8604.T", "野村ホールディングス",         "証券"),
+    ("8766.T", "東京海上ホールディングス",     "損害保険"),
+    # --- 総合テック・電機 ---
     ("6758.T", "ソニーグループ",              "総合テック"),
     ("6501.T", "日立製作所",                 "ITサービス"),
     ("6752.T", "パナソニックホールディングス",  "電機"),
     ("6503.T", "三菱電機",                   "電機"),
     ("6594.T", "ニデック",                   "モーター"),
-    # 半導体・FA
+    ("6762.T", "TDK",                        "電子部品"),
+    ("6981.T", "村田製作所",                 "電子部品"),
+    # --- 半導体・FA ---
     ("6861.T", "キーエンス",                 "FA/センサー"),
     ("8035.T", "東京エレクトロン",             "半導体製造装置"),
     ("6920.T", "レーザーテック",              "半導体検査"),
@@ -84,46 +148,90 @@ JP_STOCKS = [
     ("4063.T", "信越化学工業",               "半導体材料"),
     ("6723.T", "ルネサスエレクトロニクス",     "半導体"),
     ("6954.T", "ファナック",                  "産業ロボット"),
-    # 製薬
+    ("7735.T", "SCREENホールディングス",      "半導体製造装置"),
+    # --- 製薬・医療 ---
     ("4502.T", "武田薬品工業",               "製薬"),
     ("4568.T", "第一三共",                   "製薬"),
     ("4519.T", "中外製薬",                   "製薬"),
     ("4578.T", "大塚ホールディングス",         "製薬"),
-    # 通信
+    ("4523.T", "エーザイ",                   "製薬"),
+    ("4507.T", "塩野義製薬",                 "製薬"),
+    ("4543.T", "テルモ",                     "医療機器"),
+    ("4901.T", "富士フイルムホールディングス",  "画像・ヘルスケア"),
+    ("4151.T", "協和キリン",                 "製薬"),
+    # --- 通信 ---
     ("9432.T", "NTT",                        "通信"),
     ("9433.T", "KDDI",                       "通信"),
-    # IT・ネット
+    # --- IT・ネット ---
     ("9984.T", "ソフトバンクグループ",         "IT投資"),
     ("6702.T", "富士通",                     "ITサービス"),
     ("4307.T", "野村総合研究所",              "ITサービス"),
     ("6098.T", "リクルートホールディングス",    "HRテック"),
+    ("9613.T", "NTTデータグループ",           "ITサービス"),
     ("4751.T", "サイバーエージェント",         "デジタル広告"),
     ("4755.T", "楽天グループ",               "EC/Fintech"),
     ("3994.T", "マネーフォワード",             "Fintech SaaS"),
     ("2413.T", "エムスリー",                 "医療IT"),
-    # 商社
+    ("4689.T", "LINEヤフー",                 "ネット"),
+    ("4704.T", "トレンドマイクロ",             "セキュリティ"),
+    # --- 商社 ---
     ("8058.T", "三菱商事",                   "総合商社"),
     ("8031.T", "三井物産",                   "総合商社"),
     ("8002.T", "丸紅",                       "総合商社"),
-    # 小売・消費
+    ("8053.T", "住友商事",                   "総合商社"),
+    ("8015.T", "豊田通商",                   "商社"),
+    # --- 小売・消費 ---
     ("9983.T", "ファーストリテイリング",        "アパレル"),
     ("4452.T", "花王",                       "日用品"),
     ("2802.T", "味の素",                     "食品"),
-    # 精密・光学
+    ("3382.T", "セブン&アイ・ホールディングス", "小売"),
+    ("8267.T", "イオン",                     "小売"),
+    ("7532.T", "パン・パシフィック・インターナショナルHD", "小売"),
+    ("4911.T", "資生堂",                     "化粧品"),
+    ("2502.T", "アサヒグループホールディングス", "飲料"),
+    ("2503.T", "キリンホールディングス",       "飲料"),
+    ("2801.T", "キッコーマン",               "食品"),
+    ("2269.T", "明治ホールディングス",         "食品"),
+    ("2914.T", "日本たばこ産業",              "たばこ"),
+    # --- 精密・光学 ---
     ("7741.T", "HOYA",                       "光学"),
     ("7751.T", "キヤノン",                   "精密機器"),
     ("7733.T", "オリンパス",                 "精密機器"),
-    # ゲーム・エンタメ
+    ("7309.T", "シマノ",                     "精密機器"),
+    ("6471.T", "日本精工",                   "精密機器"),
+    ("6724.T", "セイコーエプソン",             "精密機器"),
+    # --- ゲーム・エンタメ ---
     ("7974.T", "任天堂",                     "ゲーム"),
     ("7832.T", "バンダイナムコホールディングス", "ゲーム"),
-    # 不動産
+    ("9766.T", "コナミグループ",              "ゲーム"),
+    ("3659.T", "ネクソン",                   "ゲーム"),
+    # --- 不動産 ---
     ("8801.T", "三井不動産",                 "不動産"),
-    # 重工・インフラ
+    ("8802.T", "三菱地所",                   "不動産"),
+    ("8830.T", "住友不動産",                 "不動産"),
+    # --- 重工・機械 ---
     ("7011.T", "三菱重工業",                 "重工業"),
     ("6367.T", "ダイキン工業",               "空調"),
-    # 鉄道
+    ("6301.T", "小松製作所",                 "建設機械"),
+    ("6326.T", "クボタ",                     "農業機械"),
+    ("6305.T", "日立建機",                   "建設機械"),
+    # --- 素材・化学 ---
+    ("4188.T", "三菱ケミカルグループ",         "化学"),
+    ("4612.T", "日本ペイントホールディングス",  "塗料"),
+    ("4004.T", "レゾナック・ホールディングス",  "化学"),
+    ("5401.T", "日本製鉄",                   "鉄鋼"),
+    ("5108.T", "ブリヂストン",               "タイヤ"),
+    # --- 海運 ---
+    ("9101.T", "日本郵船",                   "海運"),
+    ("9104.T", "商船三井",                   "海運"),
+    ("9107.T", "川崎汽船",                   "海運"),
+    # --- インフラ・エネルギー ---
+    ("5020.T", "ENEOSホールディングス",       "石油"),
+    ("9531.T", "東京ガス",                   "ガス"),
+    # --- 鉄道 ---
     ("9022.T", "東海旅客鉄道",               "鉄道"),
     ("9020.T", "東日本旅客鉄道",              "鉄道"),
-    # レジャー
+    ("9021.T", "西日本旅客鉄道",              "鉄道"),
+    # --- レジャー ---
     ("4661.T", "オリエンタルランド",           "レジャー"),
 ]
