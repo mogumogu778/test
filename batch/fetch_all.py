@@ -114,7 +114,7 @@ def fetch_us(all_surprises: list, all_calendar: list):
                            'updated_at': datetime.now(timezone.utc).isoformat(),
                            'prices': prices, 'indicators': indicators}, f)
 
-            # 決算データ
+            # 決算データ（EPS予想比 + YoY両方を試みる）
             try:
                 ed = ticker.get_earnings_dates(limit=12)
                 if ed is not None and not ed.empty:
@@ -151,6 +151,56 @@ def fetch_us(all_surprises: list, all_calendar: list):
                             })
             except Exception as e:
                 print(f'  earnings error {symbol}: {e}')
+
+            # YoY判定（EPSデータが取れない銘柄の補完）
+            try:
+                fin = ticker.quarterly_financials
+                if fin is not None and not fin.empty and fin.shape[1] >= 5:
+                    rev_row = next((r for r in ['Total Revenue', 'Revenue'] if r in fin.index), None)
+                    op_row  = next((r for r in ['Operating Income', 'Operating Profit'] if r in fin.index), None)
+
+                    if rev_row and op_row:
+                        rev_now = safe_float(fin.loc[rev_row].iloc[0])
+                        rev_yoy = safe_float(fin.loc[rev_row].iloc[4])
+                        op_now  = safe_float(fin.loc[op_row].iloc[0])
+                        op_yoy  = safe_float(fin.loc[op_row].iloc[4])
+
+                        rev_yoy_pct = round((rev_now - rev_yoy) / abs(rev_yoy) * 100, 2) if rev_now and rev_yoy and rev_yoy != 0 else None
+                        op_yoy_pct  = round((op_now - op_yoy) / abs(op_yoy) * 100, 2)    if op_now and op_yoy and op_yoy != 0  else None
+
+                        if rev_yoy_pct is not None and op_yoy_pct is not None:
+                            if rev_yoy_pct > 0 and op_yoy_pct > 0:
+                                pattern = '増収増益'
+                            elif rev_yoy_pct > 0:
+                                pattern = '増収減益'
+                            elif op_yoy_pct > 0:
+                                pattern = '減収増益'
+                            else:
+                                pattern = '減収減益'
+
+                            is_positive = pattern == '増収増益'
+                            is_negative = pattern == '減収減益'
+
+                            if is_positive or is_negative:
+                                report_date = fin.columns[0].strftime('%Y-%m-%d') if hasattr(fin.columns[0], 'strftime') else str(fin.columns[0])[:10]
+                                all_surprises.append({
+                                    'symbol':            symbol,
+                                    'name':              name,
+                                    'market':            'US',
+                                    'report_date':       report_date,
+                                    'actual_eps':        None,
+                                    'estimated_eps':     None,
+                                    'eps_surprise_pct':  None,
+                                    'revenue_yoy_pct':   rev_yoy_pct,
+                                    'op_profit_yoy_pct': op_yoy_pct,
+                                    'earnings_pattern':  pattern,
+                                    'price_gap_pct':     None,
+                                    'is_positive_surprise': is_positive,
+                                    'is_negative_surprise': is_negative,
+                                    'surprise_method':   'yoy',
+                                })
+            except Exception as e:
+                print(f'  financials error {symbol}: {e}')
 
             print(f'  OK {symbol}: {close}')
         except Exception as e:
