@@ -8,7 +8,7 @@ import type {
   Market,
 } from '@/types/stock'
 
-const DATA_DIR = join(process.cwd(), 'data')
+const DATA_DIR = join(process.cwd(), 'public', 'data')
 
 function readJson<T>(filePath: string, fallback: T): T {
   if (!existsSync(filePath)) return fallback

@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timezone
 from stocks_list import US_STOCKS, JP_STOCKS
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'public', 'data')
 PRICES_DIR = os.path.join(DATA_DIR, 'prices')
 os.makedirs(PRICES_DIR, exist_ok=True)
 
