@@ -4,7 +4,6 @@ import type {
   StockList,
   StockDetail,
   EarningsSurpriseList,
-  EarningsCalendar,
   Market,
 } from '@/types/stock'
 
@@ -21,7 +20,6 @@ function readJson<T>(filePath: string, fallback: T): T {
 
 const emptyStockList: StockList = { updated_at: '', stocks: [] }
 const emptySurpriseList: EarningsSurpriseList = { updated_at: '', surprises: [] }
-const emptyCalendar: EarningsCalendar = { updated_at: '', events: [] }
 
 export function getUsStocks(): StockList {
   return readJson(join(DATA_DIR, 'us_stocks.json'), emptyStockList)
@@ -38,8 +36,4 @@ export function getStockDetail(market: Market, symbol: string): StockDetail | nu
 
 export function getEarningsSurprises(): EarningsSurpriseList {
   return readJson(join(DATA_DIR, 'earnings_surprises.json'), emptySurpriseList)
-}
-
-export function getEarningsCalendar(): EarningsCalendar {
-  return readJson(join(DATA_DIR, 'earnings_calendar.json'), emptyCalendar)
 }

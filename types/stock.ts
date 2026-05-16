@@ -73,15 +73,3 @@ export interface EarningsSurpriseList {
   updated_at: string
   surprises: EarningsSurprise[]
 }
-
-export interface EarningsEvent {
-  symbol: string
-  name: string
-  market: Market
-  scheduled_date: string
-}
-
-export interface EarningsCalendar {
-  updated_at: string
-  events: EarningsEvent[]
-}

@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { getUsStocks, getJpStocks, getEarningsSurprises, getEarningsCalendar } from '@/lib/data'
-import type { EarningsSurprise } from '@/types/stock'
+import { getUsStocks, getJpStocks, getEarningsSurprises } from '@/lib/data'
+import type { EarningsSurprise, Stock } from '@/types/stock'
 
 function SurpriseRow({ s }: { s: EarningsSurprise }) {
   const badge = s.is_positive_surprise
@@ -31,15 +31,35 @@ function SurpriseRow({ s }: { s: EarningsSurprise }) {
   )
 }
 
+function MoverRow({ s }: { s: Stock }) {
+  const color = (s.price_change_pct ?? 0) > 0 ? 'text-red-500' : 'text-blue-500'
+  const sign  = (s.price_change_pct ?? 0) > 0 ? '+' : ''
+  return (
+    <Link href={`/stocks/${s.market}/${s.symbol}`}
+      className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors">
+      <div>
+        <span className="font-semibold text-sm">{s.symbol}</span>
+        <span className="text-xs text-gray-400 ml-2">{s.name}</span>
+      </div>
+      <span className={`text-sm font-mono font-semibold ${color}`}>
+        {sign}{(s.price_change_pct ?? 0).toFixed(2)}%
+      </span>
+    </Link>
+  )
+}
+
 export default function Dashboard() {
   const usData  = getUsStocks()
   const jpData  = getJpStocks()
   const { surprises } = getEarningsSurprises()
-  const { events }    = getEarningsCalendar()
 
   const allStocks = [...usData.stocks, ...jpData.stocks]
   const recentSurprises = surprises.slice(0, 10)
-  const upcomingEvents  = events.slice(0, 10)
+
+  const topMovers = [...allStocks]
+    .filter(s => s.price_change_pct != null)
+    .sort((a, b) => Math.abs(b.price_change_pct!) - Math.abs(a.price_change_pct!))
+    .slice(0, 10)
 
   const updatedAt = usData.updated_at
     ? new Date(usData.updated_at).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })
@@ -60,12 +80,11 @@ export default function Dashboard() {
 
       {/* 市場サマリー */}
       {allStocks.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
             { label: '米国株 銘柄数', value: usData.stocks.length, unit: '銘柄' },
             { label: '日本株 銘柄数', value: jpData.stocks.length, unit: '銘柄' },
             { label: '決算サプライズ', value: surprises.filter(s => s.is_positive_surprise).length, unit: '件（好決算）' },
-            { label: '今後の決算予定', value: upcomingEvents.length, unit: '件' },
           ].map(({ label, value, unit }) => (
             <div key={label} className="bg-white rounded-lg border p-4">
               <p className="text-xs text-gray-500">{label}</p>
@@ -93,28 +112,15 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* 今後の決算予定 */}
+        {/* 株価変動上位 */}
         <div className="bg-white rounded-lg border">
           <div className="flex items-center justify-between px-4 py-3 border-b">
-            <h2 className="font-semibold text-sm">今後の決算予定</h2>
-            <Link href="/earnings/calendar" className="text-xs text-blue-600 hover:underline">カレンダーで見る</Link>
+            <h2 className="font-semibold text-sm">株価変動上位（前日比）</h2>
+            <Link href="/stocks" className="text-xs text-blue-600 hover:underline">銘柄一覧へ</Link>
           </div>
-          {upcomingEvents.length === 0
+          {topMovers.length === 0
             ? <p className="text-gray-400 text-sm text-center py-8">データなし</p>
-            : (
-              <div className="divide-y">
-                {upcomingEvents.map((e, i) => (
-                  <Link key={i} href={`/stocks/${e.market}/${e.symbol}`}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors">
-                    <div>
-                      <span className="font-semibold text-sm">{e.symbol}</span>
-                      <span className="text-xs text-gray-400 ml-2">{e.name}</span>
-                    </div>
-                    <span className="text-xs text-gray-500">{e.scheduled_date}</span>
-                  </Link>
-                ))}
-              </div>
-            )
+            : <div className="divide-y">{topMovers.map((s, i) => <MoverRow key={i} s={s} />)}</div>
           }
         </div>
       </div>

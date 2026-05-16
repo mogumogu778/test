@@ -6,7 +6,6 @@ const links = [
   { href: '/',                      label: 'ダッシュボード' },
   { href: '/stocks',                label: '銘柄一覧' },
   { href: '/earnings/surprises',    label: '決算サプライズ' },
-  { href: '/earnings/calendar',     label: '決算カレンダー' },
 ]
 
 export function Navigation() {

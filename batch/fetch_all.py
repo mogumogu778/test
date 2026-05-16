@@ -71,7 +71,7 @@ def prices_to_list(hist: pd.DataFrame, days: int) -> tuple[list, list]:
     return prices, indicators
 
 
-def fetch_us(all_surprises: list, all_calendar: list):
+def fetch_us(all_surprises: list):
     stocks_data = []
     for symbol, name, sector in US_STOCKS:
         try:
@@ -142,13 +142,6 @@ def fetch_us(all_surprises: list, all_calendar: list):
                                     'is_negative_surprise': pct <= -SURPRISE_THRESHOLD,
                                     'surprise_method':   'eps_analyst',
                                 })
-                        elif eps_rep is None and date > pd.Timestamp.now(tz=date.tzinfo):
-                            all_calendar.append({
-                                'symbol':         symbol,
-                                'name':           name,
-                                'market':         'US',
-                                'scheduled_date': date_str,
-                            })
             except Exception as e:
                 print(f'  earnings error {symbol}: {e}')
 
@@ -211,7 +204,7 @@ def fetch_us(all_surprises: list, all_calendar: list):
         json.dump({'updated_at': datetime.now(timezone.utc).isoformat(), 'stocks': stocks_data}, f, ensure_ascii=False)
 
 
-def fetch_jp(all_surprises: list, all_calendar: list):
+def fetch_jp(all_surprises: list):
     stocks_data = []
     for yf_symbol, name, sector in JP_STOCKS:
         symbol = yf_symbol.replace('.T', '')
@@ -317,20 +310,15 @@ def fetch_jp(all_surprises: list, all_calendar: list):
 def main():
     print('=== US stocks ===')
     all_surprises: list = []
-    all_calendar:  list = []
-    fetch_us(all_surprises, all_calendar)
+    fetch_us(all_surprises)
 
     print('=== JP stocks ===')
-    fetch_jp(all_surprises, all_calendar)
+    fetch_jp(all_surprises)
 
     all_surprises.sort(key=lambda x: x['report_date'], reverse=True)
-    all_calendar.sort(key=lambda x: x['scheduled_date'])
 
     with open(os.path.join(DATA_DIR, 'earnings_surprises.json'), 'w', encoding='utf-8') as f:
         json.dump({'updated_at': datetime.now(timezone.utc).isoformat(), 'surprises': all_surprises}, f, ensure_ascii=False)
-
-    with open(os.path.join(DATA_DIR, 'earnings_calendar.json'), 'w', encoding='utf-8') as f:
-        json.dump({'updated_at': datetime.now(timezone.utc).isoformat(), 'events': all_calendar}, f, ensure_ascii=False)
 
     print('=== Done ===')
 
