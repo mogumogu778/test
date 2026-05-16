@@ -1,6 +1,10 @@
 name: Daily Stock Data Batch
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'batch/**'
   schedule:
     - cron: '30 6 * * 1-5'   # JST 15:30（東証閉場後）
     - cron: '30 21 * * 1-5'  # JST 翌6:30（NYSE閉場後）
