@@ -1,6 +1,6 @@
-import { getEarningsSurprises } from '@/lib/data'
+import { getEarningsSurprises, getUsStocks, getJpStocks } from '@/lib/data'
 import Link from 'next/link'
-import type { EarningsSurprise } from '@/types/stock'
+import type { EarningsSurprise, Stock } from '@/types/stock'
 
 function pct(v: number | null, digits = 1) {
   if (v == null) return <span className="text-gray-300">-</span>
@@ -21,8 +21,23 @@ function SurpriseMethodBadge({ s }: { s: EarningsSurprise }) {
   )
 }
 
+function PriceCell({ stock }: { stock: Stock | undefined }) {
+  if (!stock) return <td className="px-4 py-3 text-gray-300">-</td>
+  const color = (stock.price_change_pct ?? 0) > 0 ? 'text-red-500' : (stock.price_change_pct ?? 0) < 0 ? 'text-blue-500' : 'text-gray-500'
+  const sign  = (stock.price_change_pct ?? 0) > 0 ? '+' : ''
+  return (
+    <td className="px-4 py-3">
+      <div className="font-mono text-sm">{stock.close.toFixed(2)}</div>
+      <div className={`text-xs ${color}`}>{sign}{(stock.price_change_pct ?? 0).toFixed(2)}%</div>
+    </td>
+  )
+}
+
 export default function SurprisesPage() {
   const { surprises, updated_at } = getEarningsSurprises()
+  const stockMap = new Map<string, Stock>(
+    [...getUsStocks().stocks, ...getJpStocks().stocks].map(s => [`${s.market}_${s.symbol}`, s])
+  )
 
   const positive = surprises.filter(s => s.is_positive_surprise)
   const negative = surprises.filter(s => s.is_negative_surprise)
@@ -54,7 +69,7 @@ export default function SurprisesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
                 <tr>
-                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
+                  {['銘柄', '現在株価', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
                     <th key={h} className="px-4 py-3 text-left">{h}</th>
                   ))}
                 </tr>
@@ -68,6 +83,7 @@ export default function SurprisesPage() {
                         <div className="text-xs text-gray-400">{s.name}</div>
                       </Link>
                     </td>
+                    <PriceCell stock={stockMap.get(`${s.market}_${s.symbol}`)} />
                     <td className="px-4 py-3 text-gray-500">{s.report_date}</td>
                     <td className="px-4 py-3">{pct(s.eps_surprise_pct)}</td>
                     <td className="px-4 py-3">{pct(s.op_profit_yoy_pct)}</td>
@@ -95,7 +111,7 @@ export default function SurprisesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
                 <tr>
-                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
+                  {['銘柄', '現在株価', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
                     <th key={h} className="px-4 py-3 text-left">{h}</th>
                   ))}
                 </tr>
@@ -109,6 +125,7 @@ export default function SurprisesPage() {
                         <div className="text-xs text-gray-400">{s.name}</div>
                       </Link>
                     </td>
+                    <PriceCell stock={stockMap.get(`${s.market}_${s.symbol}`)} />
                     <td className="px-4 py-3 text-gray-500">{s.report_date}</td>
                     <td className="px-4 py-3">{pct(s.eps_surprise_pct)}</td>
                     <td className="px-4 py-3">{pct(s.op_profit_yoy_pct)}</td>
