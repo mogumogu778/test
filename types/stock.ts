@@ -18,6 +18,7 @@ export interface Stock {
   ma_200: number | null
   high_52w: number | null
   low_52w: number | null
+  ma25_rising: boolean | null
   date: string
 }
 
@@ -64,6 +65,7 @@ export interface EarningsSurprise {
   op_profit_yoy_pct: number | null
   earnings_pattern: EarningsPattern | null
   price_gap_pct: number | null
+  ma25_rising: boolean | null
   is_positive_surprise: boolean
   is_negative_surprise: boolean
   surprise_method: 'eps_analyst' | 'yoy'

@@ -28,6 +28,34 @@ def safe_int(val) -> int | None:
         return None
 
 
+def calc_price_gap(hist: pd.DataFrame, report_date_str: str) -> float | None:
+    try:
+        ts = pd.Timestamp(report_date_str)
+        if hist.index.tz is not None:
+            ts = ts.tz_localize(hist.index.tz)
+        past   = hist.index[hist.index <= ts]
+        future = hist.index[hist.index > ts]
+        if len(past) == 0 or len(future) == 0:
+            return None
+        prev_close = safe_float(hist.loc[past[-1], 'Close'])
+        next_open  = safe_float(hist.loc[future[0], 'Open'])
+        if prev_close and next_open and prev_close != 0:
+            return round((next_open - prev_close) / prev_close * 100, 2)
+    except Exception:
+        pass
+    return None
+
+
+def calc_ma25_rising(hist: pd.DataFrame) -> bool | None:
+    if len(hist) < 7:
+        return None
+    now = safe_float(hist['MA_25'].iloc[-1])
+    prev = safe_float(hist['MA_25'].iloc[-6])
+    if now is None or prev is None:
+        return None
+    return now > prev
+
+
 def calc_rsi(close: pd.Series, period: int = 14) -> pd.Series:
     delta = close.diff()
     gain = delta.clip(lower=0).rolling(period).mean()
@@ -88,6 +116,7 @@ def fetch_us(all_surprises: list):
             price_change_pct = round((close - prev_close) / prev_close * 100, 2) if prev_close else 0
             high_52w = safe_float(hist['High'].rolling(252, min_periods=1).max().iloc[-1])
             low_52w  = safe_float(hist['Low'].rolling(252, min_periods=1).min().iloc[-1])
+            ma25_rising = calc_ma25_rising(hist)
 
             stocks_data.append({
                 'symbol':           symbol,
@@ -105,6 +134,7 @@ def fetch_us(all_surprises: list):
                 'ma_200':           safe_float(latest.get('MA_200')),
                 'high_52w':         high_52w,
                 'low_52w':          low_52w,
+                'ma25_rising':      ma25_rising,
                 'date':             hist.index[-1].strftime('%Y-%m-%d'),
             })
 
@@ -137,7 +167,8 @@ def fetch_us(all_surprises: list):
                                     'revenue_yoy_pct':   None,
                                     'op_profit_yoy_pct': None,
                                     'earnings_pattern':  None,
-                                    'price_gap_pct':     None,
+                                    'price_gap_pct':     calc_price_gap(hist, date_str),
+                                    'ma25_rising':       ma25_rising,
                                     'is_positive_surprise': pct >= SURPRISE_THRESHOLD,
                                     'is_negative_surprise': pct <= -SURPRISE_THRESHOLD,
                                     'surprise_method':   'eps_analyst',
@@ -188,6 +219,7 @@ def fetch_us(all_surprises: list):
                                     'op_profit_yoy_pct': op_yoy_pct,
                                     'earnings_pattern':  pattern,
                                     'price_gap_pct':     None,
+                                    'ma25_rising':       ma25_rising,
                                     'is_positive_surprise': is_positive,
                                     'is_negative_surprise': is_negative,
                                     'surprise_method':   'yoy',
@@ -222,6 +254,7 @@ def fetch_jp(all_surprises: list):
             price_change_pct = round((close - prev_close) / prev_close * 100, 2) if prev_close else 0
             high_52w = safe_float(hist['High'].rolling(252, min_periods=1).max().iloc[-1])
             low_52w  = safe_float(hist['Low'].rolling(252, min_periods=1).min().iloc[-1])
+            ma25_rising = calc_ma25_rising(hist)
 
             stocks_data.append({
                 'symbol':           symbol,
@@ -239,6 +272,7 @@ def fetch_jp(all_surprises: list):
                 'ma_200':           safe_float(latest.get('MA_200')),
                 'high_52w':         high_52w,
                 'low_52w':          low_52w,
+                'ma25_rising':      ma25_rising,
                 'date':             hist.index[-1].strftime('%Y-%m-%d'),
             })
 
@@ -291,6 +325,7 @@ def fetch_jp(all_surprises: list):
                                     'op_profit_yoy_pct': op_yoy_pct,
                                     'earnings_pattern':  pattern,
                                     'price_gap_pct':     None,
+                                    'ma25_rising':       ma25_rising,
                                     'is_positive_surprise': is_positive,
                                     'is_negative_surprise': is_negative,
                                     'surprise_method':   'yoy',

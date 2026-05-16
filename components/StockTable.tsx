@@ -29,7 +29,7 @@ export function StockTable({ stocks }: { stocks: Stock[] }) {
       <table className="w-full text-sm">
         <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
           <tr>
-            {['銘柄', '株価', '前日比', 'RSI(14)', 'MA25', '出来高', '52週高値比'].map(h => (
+            {['銘柄', '株価', '前日比', 'RSI(14)', 'MA25', 'MA25↑', '出来高', '52週高値比'].map(h => (
               <th key={h} className="px-4 py-3 text-right first:text-left">{h}</th>
             ))}
           </tr>
@@ -51,6 +51,13 @@ export function StockTable({ stocks }: { stocks: Stock[] }) {
                 <td className="px-4 py-3 text-right">{pct(s.price_change_pct)}</td>
                 <td className={`px-4 py-3 text-right ${rsiColor(s.rsi_14)}`}>{num(s.rsi_14, 1)}</td>
                 <td className="px-4 py-3 text-right text-gray-600">{num(s.ma_25)}</td>
+                <td className="px-4 py-3 text-right">
+                  {s.ma25_rising === true
+                    ? <span className="text-red-500 font-semibold">▲</span>
+                    : s.ma25_rising === false
+                    ? <span className="text-blue-500 font-semibold">▼</span>
+                    : <span className="text-gray-300">-</span>}
+                </td>
                 <td className="px-4 py-3 text-right text-gray-600">
                   {s.volume ? (s.volume / 1_000_000).toFixed(1) + 'M' : '-'}
                 </td>

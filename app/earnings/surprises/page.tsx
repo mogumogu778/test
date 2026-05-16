@@ -54,7 +54,7 @@ export default function SurprisesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
                 <tr>
-                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '判定方法'].map(h => (
+                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
                     <th key={h} className="px-4 py-3 text-left">{h}</th>
                   ))}
                 </tr>
@@ -72,6 +72,12 @@ export default function SurprisesPage() {
                     <td className="px-4 py-3">{pct(s.eps_surprise_pct)}</td>
                     <td className="px-4 py-3">{pct(s.op_profit_yoy_pct)}</td>
                     <td className="px-4 py-3">{pct(s.revenue_yoy_pct)}</td>
+                    <td className="px-4 py-3">{pct(s.price_gap_pct)}</td>
+                    <td className="px-4 py-3">
+                      {s.ma25_rising === true ? <span className="text-red-500 font-semibold">▲</span>
+                        : s.ma25_rising === false ? <span className="text-blue-500 font-semibold">▼</span>
+                        : <span className="text-gray-300">-</span>}
+                    </td>
                     <td className="px-4 py-3"><SurpriseMethodBadge s={s} /></td>
                   </tr>
                 ))}
@@ -89,7 +95,7 @@ export default function SurprisesPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
                 <tr>
-                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '判定方法'].map(h => (
+                  {['銘柄', '決算日', 'EPS差分', '営業利益YoY', '売上YoY', '翌日ギャップ', 'MA25↑', '判定方法'].map(h => (
                     <th key={h} className="px-4 py-3 text-left">{h}</th>
                   ))}
                 </tr>
@@ -107,6 +113,12 @@ export default function SurprisesPage() {
                     <td className="px-4 py-3">{pct(s.eps_surprise_pct)}</td>
                     <td className="px-4 py-3">{pct(s.op_profit_yoy_pct)}</td>
                     <td className="px-4 py-3">{pct(s.revenue_yoy_pct)}</td>
+                    <td className="px-4 py-3">{pct(s.price_gap_pct)}</td>
+                    <td className="px-4 py-3">
+                      {s.ma25_rising === true ? <span className="text-red-500 font-semibold">▲</span>
+                        : s.ma25_rising === false ? <span className="text-blue-500 font-semibold">▼</span>
+                        : <span className="text-gray-300">-</span>}
+                    </td>
                     <td className="px-4 py-3"><SurpriseMethodBadge s={s} /></td>
                   </tr>
                 ))}
